@@ -3,7 +3,7 @@
 	"type": "silverstripe-module",
 	"description": "",
 	"homepage": "http://www.silverstripe-webdevelopment.com",
-	"keywords": ["widgets_currencyconverter", "silverstripe"],
+	"keywords": ["widgets_currencyconverter", "silverstripe", "currency conversion"],
 	"license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
 	"authors":[
 		{
@@ -14,7 +14,9 @@
 		}
 	],
 	"require":{
-		"php": ">=5.3.2",
 		"silverstripe/framework": ">=3.0.0"
-	}
+	},
+	"extra": {
+		"installer-name": "widgets_currencyconverter"
+	}	
 }
