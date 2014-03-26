@@ -2,33 +2,18 @@
 
 class CurrencyConverterPage extends Page {
 
-	static $icon = "widgets_currencyconverter/images/treeicons/CurrencyConverterPage";
+	private static $icon = "widgets_currencyconverter/images/treeicons/CurrencyConverterPage";
 
-	static $db = array(
+	private static $db = array(
 		"IntroText" => "Varchar(250)"
 	);
 
-	static $has_one = array(
+	private static $has_one = array(
 		"MainContent" => "WidgetArea"
 	);
 
 	public function canCreate($member = null) {
-		return !/*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: /*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: DataObject::get_one(
-NOTE:  - replace with ClassName::get()->First()  
-### @@@@ ########### @@@@ ###
-*/DataObject::get_one(
-NOTE:  - replace with ClassName::get()->First()  
-### @@@@ ########### @@@@ ###
-*//*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: DataObject::get_one(
-NOTE:  - replace with ClassName::get()->First()  
-### @@@@ ########### @@@@ ###
-*/DataObject::get_one("SiteTree", "{$bt}ClassName{$bt} = 'CurrencyConverterPage'");
+		return SiteTree::get()->filter(array("ClassName" => "CurrencyConverterPage"))->count() ? false : true;
 	}
 
 	function getCMSFields() {

@@ -6,36 +6,21 @@
 				$page->DefaultAmount = "100";
 */
 
-class CurrencyConverterWidget /*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: /*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: extends Widget
-NOTE:  Make sure silverstripe-widgets module is installed  
-### @@@@ ########### @@@@ ###
-*/extends Widget
-NOTE:  Make sure silverstripe-widgets module is installed  
-### @@@@ ########### @@@@ ###
-*//*
-### @@@@ UPGRADE REQUIRED @@@@ ###
-FIND: extends Widget
-NOTE:  Make sure silverstripe-widgets module is installed  
-### @@@@ ########### @@@@ ###
-*/extends Widget {
+class CurrencyConverterWidget extends Widget {
 
-	static $title = 'Currency Converter';
+	private static $title = 'Currency Converter';
 
-	static $cmsTitle = 'Currency Converter';
+	private static $cmsTitle = 'Currency Converter';
 
-	static $description = 'Allows users to convert any amount FROM one TO another currency.';
+	private static $description = 'Allows users to convert any amount FROM one TO another currency.';
 
-	static $db = array(
+	private static $db = array(
 		"DefaultFromCurrency" => "Varchar(3)",
 		"DefaultToCurrency" => "Varchar(3)",
 		"DefaultAmount" => "Currency"
 	);
 
-	static $defaults = array(
+	private static $defaults = array(
 		"DefaultFromCurrency" => "NZD",
 		"DefaultToCurrency" => "EUR",
 		"DefaultAmount" => "1"
@@ -69,9 +54,9 @@ NOTE:  Make sure silverstripe-widgets module is installed
 		}
 	}
 
-	protected static $array_of_currencies_to_show = array();
+	private static $array_of_currencies_to_show = array();
 
-	protected static $currency_list = array(
+	private static $currency_list = array(
 "-0-" => "-- Select Currency --",
 "usd"=>"us dollar",
 "afn"=>"afghanistan afghani",
@@ -270,11 +255,11 @@ NOTE:  Make sure silverstripe-widgets module is installed
 "zwd"=>"zimbabwe dollar"
 	);
 
-	protected static $rates = array();
+	private static $rates = array();
 
-	protected static $from_currency_code = '';
+	private static $from_currency_code = '';
 
-	protected static $to_currency_code = '';
+	private static $to_currency_code = '';
 
 	private static $debug = false;
 
