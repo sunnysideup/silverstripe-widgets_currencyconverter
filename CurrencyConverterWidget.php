@@ -6,7 +6,22 @@
 				$page->DefaultAmount = "100";
 */
 
-class CurrencyConverterWidget extends Widget {
+class CurrencyConverterWidget /*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: /*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: extends Widget
+NOTE:  Make sure silverstripe-widgets module is installed  
+### @@@@ ########### @@@@ ###
+*/extends Widget
+NOTE:  Make sure silverstripe-widgets module is installed  
+### @@@@ ########### @@@@ ###
+*//*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: extends Widget
+NOTE:  Make sure silverstripe-widgets module is installed  
+### @@@@ ########### @@@@ ###
+*/extends Widget {
 
 	static $title = 'Currency Converter';
 
@@ -413,7 +428,7 @@ class CurrencyConverterWidget extends Widget {
 	//CMS ...
 
 	public function getCMSFields() {
-		return new FieldSet(
+		return new FieldList(
 			new TextField("defaultFromCurrencyCode", _t('CurrencyConverterWidget.defaultFromCurrencyCode', "Default From Currency Code")),
 			new TextField("Defaultto_currency_code", _t('CurrencyConverterWidget.Defaultto_currency_code', "Default To Currency Code")),
 			new CurrencyField("DefaultAmount", _t('CurrencyConverterWidget.DefaultAmount', "Default Amount to be Converted"))
@@ -443,7 +458,7 @@ class CurrencyConverterWidget extends Widget {
 	public function CurrencyConverter() {
 		$this->getValues();
 		$convertedAmount = $this->getExchangedAmount();
-		$output = new DataObjectSet();
+		$output = new ArrayList();
 		$output->push(
 			new ArrayData(
 			array(
@@ -460,7 +475,7 @@ class CurrencyConverterWidget extends Widget {
 
 	public function Currencies() {
 		$this->getValues();
-		$currencies = new DataObjectSet;
+		$currencies = new ArrayList;
 		foreach(self::$currency_list as $key => $value) {
 			$from = ($key == self::$from_currency_code);
 			$to = ($key == self::$to_currency_code);

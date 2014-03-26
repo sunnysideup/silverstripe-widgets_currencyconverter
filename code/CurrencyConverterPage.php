@@ -12,14 +12,28 @@ class CurrencyConverterPage extends Page {
 		"MainContent" => "WidgetArea"
 	);
 
-	public function canCreate() {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
-		return !DataObject::get_one("SiteTree", "{$bt}ClassName{$bt} = 'CurrencyConverterPage'");
+	public function canCreate($member = null) {
+		return !/*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: /*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: DataObject::get_one(
+NOTE:  - replace with ClassName::get()->First()  
+### @@@@ ########### @@@@ ###
+*/DataObject::get_one(
+NOTE:  - replace with ClassName::get()->First()  
+### @@@@ ########### @@@@ ###
+*//*
+### @@@@ UPGRADE REQUIRED @@@@ ###
+FIND: DataObject::get_one(
+NOTE:  - replace with ClassName::get()->First()  
+### @@@@ ########### @@@@ ###
+*/DataObject::get_one("SiteTree", "{$bt}ClassName{$bt} = 'CurrencyConverterPage'");
 	}
 
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab("Root.Content.Disclaimer", new TextField("IntroText", "Intro Text (can put disclaimer here)"));
+		$fields->addFieldToTab("Root.Disclaimer", new TextField("IntroText", "Intro Text (can put disclaimer here)"));
 		return $fields;
 	}
 
