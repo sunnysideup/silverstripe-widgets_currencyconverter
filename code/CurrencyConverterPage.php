@@ -1,9 +1,14 @@
 <?php
-
+/**
+  * This page is the Currency Converter page
+  *
+  */
 class CurrencyConverterPage extends Page {
 
 	private static $icon = "widgets_currencyconverter/images/treeicons/CurrencyConverterPage";
 
+	private static $description = "This page is the Currency Converter page";
+	
 	private static $db = array(
 		"IntroText" => "Varchar(250)"
 	);
