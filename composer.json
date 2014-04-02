@@ -13,8 +13,9 @@
 			"role" : "lead developer"
 		}
 	],
-	"require":{
-		"silverstripe/framework": ">=3.0.0"
+	"require": {
+		"silverstripe/framework": ">=3.1.0",
+		"silverstripe/cms": ">=3.1.0"
 	},
 	"extra": {
 		"installer-name": "widgets_currencyconverter"
