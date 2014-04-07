@@ -1,22 +1,30 @@
-###############################################
 widgets currency converter
-###############################################
+================================================================================
+
+includes a widget currency converter and a currency
+converter page
+
+uses http://download.finance.yahoo.com/d/quotes.csv
 
 Maintainer Contact
 -----------------------------------------------
 nicolaas [at] sunnysideup.co.nz
 
+
 Requirements
 -----------------------------------------------
-SS 2.3+
+see composer.json
 
 
 Documentation
 -----------------------------------------------
-includes a widget currency converter and a currency
-converter page
+Please contact author for more details.
 
-uses http://download.finance.yahoo.com/d/quotes.csv
+Any bug reports and/or feature requests will be
+looked at in detail.
+
+We are also very happy to provide personalised support
+for this module in exchange for a small donation.
 
 
 Installation Instructions
