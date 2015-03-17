@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<source xmlns="http://xml.phpdox.net/src">
+  <dir name="/var/www/_modules/widgets_currencyconverter/trunk">
+    <file name="_config.php" size="860" time="2015-03-14T10:23:53+13:00" unixtime="1426281833" sha1="d6874b875d97fb010a441b7940203d01046ccd43" xml="tokens/_config.php.xml"/>
+    <dir name="code">
+      <file name="CurrencyConverterPage.php" size="1427" time="2015-03-14T10:23:53+13:00" unixtime="1426281833" sha1="8448c3b4cff3830191c86dd8e784e5de8ae50fe0" xml="tokens/code/CurrencyConverterPage.php.xml"/>
+    </dir>
+    <dir name="lang">
+      <file name="en_US.php" size="315" time="2015-03-14T10:23:53+13:00" unixtime="1426281833" sha1="7ac186104f7f01cccbccde6bc2de7656ab4d5ef1" xml="tokens/lang/en_US.php.xml"/>
+    </dir>
+    <file name="CurrencyConverterWidget.php" size="13984" time="2015-03-14T10:23:53+13:00" unixtime="1426281833" sha1="b91449c498a9f4e7f0a52f46dcb3fdf8dc48f206" xml="tokens/CurrencyConverterWidget.php.xml"/>
+  </dir>
+</source>

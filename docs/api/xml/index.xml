@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index xmlns="http://xml.phpdox.net/src" basedir="/var/www/_modules/widgets_currencyconverter/trunk">
+  <namespace name="">
+    <class name="CurrencyConverterPage" src="code/CurrencyConverterPage.php" description="This page is the Currency Converter page" xml="classes/CurrencyConverterPage.xml"/>
+    <class name="CurrencyConverterPage_Controller" src="code/CurrencyConverterPage.php" xml="classes/CurrencyConverterPage_Controller.xml"/>
+    <class name="CurrencyConverterWidget" src="CurrencyConverterWidget.php" xml="classes/CurrencyConverterWidget.xml"/>
+    <class name="CurrencyConverterWidget_Controller" src="CurrencyConverterWidget.php" xml="classes/CurrencyConverterWidget_Controller.xml"/>
+  </namespace>
+</index>

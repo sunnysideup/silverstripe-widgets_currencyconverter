@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CurrencyConverterPage_Controller" namespace="" name="CurrencyConverterPage_Controller" abstract="false" final="false" start="33" end="49">
+  <file path="/var/www/_modules/widgets_currencyconverter/trunk/docs/en/phpdox/../../../code" file="CurrencyConverterPage.php" realpath="/var/www/_modules/widgets_currencyconverter/trunk/code/CurrencyConverterPage.php" size="1427" time="2015-03-14T10:23:53+13:00" unixtime="1426281833" sha1="8448c3b4cff3830191c86dd8e784e5de8ae50fe0" relative="code/CurrencyConverterPage.php"/>
+  <extends full="Page_Controller" namespace="" name="Page_Controller"/>
+  <method name="init" start="34" end="39" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="index" start="40" end="44" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="CurrencyConverterWidget" start="45" end="48" abstract="false" final="false" static="false" visibility="public"/>
+</class>
