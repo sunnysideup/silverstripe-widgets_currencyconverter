@@ -1,24 +1,26 @@
 {
-	"name": "sunnysideup/widgets_currencyconverter",
-	"type": "silverstripe-module",
-	"description": "",
-	"homepage": "http://www.silverstripe-webdevelopment.com",
-	"keywords": ["widgets_currencyconverter", "silverstripe", "currency conversion"],
-	"license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
-	"authors":[
-		{
-			"name": "Nicolaas Francken",
-			"homepage": "https://github.com/sunnysideup",
-			"email" : "modules@sunnysideup.co.nz",
-			"role" : "lead developer"
-		}
-	],
-	"require": {
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1",
-		"silverstripe/widgets": "*"
-	},
-	"extra": {
-		"installer-name": "widgets_currencyconverter"
-	}
+    "name": "sunnysideup/widgets_currencyconverter",
+    "type": "silverstripe-module",
+    "description": "",
+    "keywords": [
+        "widgets_currencyconverter",
+        "silverstripe",
+        "currency conversion"
+    ],
+    "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "~3.1",
+        "silverstripe/cms": "~3.1",
+        "silverstripe/widgets": "*"
+    },
+    "extra": {
+        "installer-name": "widgets_currencyconverter"
+    }
 }
