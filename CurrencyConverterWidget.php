@@ -1,62 +1,64 @@
 <?php
 
 /*
-				$page->defaultFromCurrencyCode = "NZD";
-				$page->Defaultto_currency_code = "EUR";
-				$page->DefaultAmount = "100";
+                $page->defaultFromCurrencyCode = "NZD";
+                $page->Defaultto_currency_code = "EUR";
+                $page->DefaultAmount = "100";
 */
 
-class CurrencyConverterWidget extends Widget {
+class CurrencyConverterWidget extends Widget
+{
+    private static $title = 'Currency Converter';
 
-	private static $title = 'Currency Converter';
+    private static $cmsTitle = 'Currency Converter';
 
-	private static $cmsTitle = 'Currency Converter';
+    private static $description = 'Allows users to convert any amount FROM one TO another currency.';
 
-	private static $description = 'Allows users to convert any amount FROM one TO another currency.';
+    private static $db = array(
+        "DefaultFromCurrency" => "Varchar(3)",
+        "DefaultToCurrency" => "Varchar(3)",
+        "DefaultAmount" => "Currency"
+    );
 
-	private static $db = array(
-		"DefaultFromCurrency" => "Varchar(3)",
-		"DefaultToCurrency" => "Varchar(3)",
-		"DefaultAmount" => "Currency"
-	);
+    private static $defaults = array(
+        "DefaultFromCurrency" => "NZD",
+        "DefaultToCurrency" => "EUR",
+        "DefaultAmount" => "1"
+    );
 
-	private static $defaults = array(
-		"DefaultFromCurrency" => "NZD",
-		"DefaultToCurrency" => "EUR",
-		"DefaultAmount" => "1"
-	);
+    public static function set_default_from_currency($v)
+    {
+        self::$defaults["DefaultFromCurrency"] = $v;
+    }
 
-	static function set_default_from_currency($v) {
-		self::$defaults["DefaultFromCurrency"] = $v;
-	}
+    public static function set_default_to_currency($v)
+    {
+        self::$defaults["DefaultToCurrency"] = $v;
+    }
 
-	static function set_default_to_currency($v) {
-		self::$defaults["DefaultToCurrency"] = $v;
-	}
+    public static function set_default_amount($v)
+    {
+        self::$defaults["DefaultAmount"] = $v;
+    }
 
-	static function set_default_amount($v) {
-		self::$defaults["DefaultAmount"] = $v;
-	}
+    public static function add_to_array_of_currencies_to_show($arrayOfCodes)
+    {
+        if (is_array($arrayOfCodes)) {
+            foreach ($arrayOfCodes as $code) {
+                if (3 == strlen($code)) {
+                    self::$array_of_currencies_to_show[] = $code;
+                }
+            }
+        } elseif (3 == strlen($arrayOfCodes)) {
+            self::$array_of_currencies_to_show[] = $arrayOfCodes;
+        } else {
+            debug::show("add_to_array_of_currencies_to_show is not provided with right argument");
+        }
+    }
 
-	static function add_to_array_of_currencies_to_show($arrayOfCodes) {
-		if(is_array($arrayOfCodes)) {
-			foreach($arrayOfCodes as $code) {
-				if(3 == strlen($code)) {
-					self::$array_of_currencies_to_show[] = $code;
-				}
-			}
-		}
-		elseif(3 == strlen($arrayOfCodes)) {
-			self::$array_of_currencies_to_show[] = $arrayOfCodes;
-		}
-		else{
-			debug::show("add_to_array_of_currencies_to_show is not provided with right argument");
-		}
-	}
+    private static $array_of_currencies_to_show = array();
 
-	private static $array_of_currencies_to_show = array();
-
-	private static $currency_list = array(
+    private static $currency_list = array(
 "-0-" => "-- Select Currency --",
 "usd"=>"us dollar",
 "afn"=>"afghanistan afghani",
@@ -253,257 +255,282 @@ class CurrencyConverterWidget extends Widget {
 "yun"=>"yugoslav dinar",
 "zmk"=>"zambian kwacha",
 "zwd"=>"zimbabwe dollar"
-	);
+    );
 
-	private static $rates = array();
+    private static $rates = array();
 
-	private static $from_currency_code = '';
+    private static $from_currency_code = '';
 
-	private static $to_currency_code = '';
+    private static $to_currency_code = '';
 
-	private static $debug = false;
+    private static $debug = false;
 
-	protected $amount = 0;
+    protected $amount = 0;
 
-	// set once....
+    // set once....
 
-	static function set_debug_mode($trueOrFalse) {
-		self::$debug = $trueOrFalse;
-	}
+    public static function set_debug_mode($trueOrFalse)
+    {
+        self::$debug = $trueOrFalse;
+    }
 
-	static function get_currency_list() {
-		if(count(self::$array_of_currencies_to_show)) {
-			foreach(self::$array_of_currencies_to_show as $code) {
-				$array[$code] = self::$currency_list[$code];
-			}
-		}
-		else {
-			$array = self::$currency_list;
-		}
-		return $array;
-	}
+    public static function get_currency_list()
+    {
+        if (count(self::$array_of_currencies_to_show)) {
+            foreach (self::$array_of_currencies_to_show as $code) {
+                $array[$code] = self::$currency_list[$code];
+            }
+        } else {
+            $array = self::$currency_list;
+        }
+        return $array;
+    }
 
-	static function set_from_currency_code($v) {
-		if(self::currency_exists($v)) {
-			self::$from_currency_code = $v;
-			Session::set("CurrencyConverter.from_currency_code", $v);
-		}
-	}
+    public static function set_from_currency_code($v)
+    {
+        if (self::currency_exists($v)) {
+            self::$from_currency_code = $v;
+            Session::set("CurrencyConverter.from_currency_code", $v);
+        }
+    }
 
-	static function set_to_currency_code($v) {
-		if(self::currency_exists($v)) {
-			self::$to_currency_code = $v;
-			Session::set("CurrencyConverter.to_currency_code", $v);
-		}
-	}
+    public static function set_to_currency_code($v)
+    {
+        if (self::currency_exists($v)) {
+            self::$to_currency_code = $v;
+            Session::set("CurrencyConverter.to_currency_code", $v);
+        }
+    }
 
-	static function get_from_currency_code() {
-		self::retrieve_defaults();
-		return self::$from_currency_code;
-	}
+    public static function get_from_currency_code()
+    {
+        self::retrieve_defaults();
+        return self::$from_currency_code;
+    }
 
-	static function get_to_currency_code() {
-		self::retrieve_defaults();
-		return self::$to_currency_code;
-	}
+    public static function get_to_currency_code()
+    {
+        self::retrieve_defaults();
+        return self::$to_currency_code;
+    }
 
-	static function from_equals_to() {
-		self::retrieve_defaults();
-		return (strtolower(self::$to_currency_code) == strtolower(self::$from_currency_code));
-	}
+    public static function from_equals_to()
+    {
+        self::retrieve_defaults();
+        return (strtolower(self::$to_currency_code) == strtolower(self::$from_currency_code));
+    }
 
-	static function has_from_and_to_currencies() {
-		self::retrieve_defaults();
-		if(self::$to_currency_code && self::$from_currency_code) {
-			return true;
-		}
-	}
-
-
-	static function get_rate() {
-		//$url = http://finance.yahoo.com/currency/convert?amt=1&from=NZD&to=USD&submit=Convert
-		if(self::has_from_and_to_currencies() && !self::from_equals_to()) {
-			if(isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code]) && self::$rates[self::$from_currency_code.".".self::$to_currency_code] > 0) {
-				return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
-			}
-			else {
-				$url = 'http://download.finance.yahoo.com/d/quotes.csv?s='.self::$from_currency_code.self::$to_currency_code.'=X&f=sl1d1t1ba&e=.csv';
-				if (($ch = @curl_init())) {
-				$timeout = 5; // set to zero for no timeout
-				curl_setopt ($ch, CURLOPT_URL, "$url");
-				curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-				$record = curl_exec($ch);
-				if(self::$debug) {echo "-- CURL:"; print_r($record);}
-				curl_close($ch);
-				}
-				if(!$record) {
-					$record = file_get_contents($url);
-					//if(self::$debug) {echo "-- FILE_GET_CONTENTS:"; print_r($record);}
-				}
-				if ($record) {
-					$currency_data = explode(',', $record);
-					self::$rates[self::$from_currency_code.".".self::$to_currency_code] = $currency_data[1];
-					if(!isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code]) || !self::$rates[self::$from_currency_code.".".self::$to_currency_code]) {
-						self::$rates[self::$from_currency_code.".".self::$to_currency_code] = $currency_data[2];
-					}
-				}
-				else {
-					if(self::$debug) {echo "-- could not retrieve data";}
-				}
-			}
-		}
-		elseif(self::from_equals_to()) {
-			self::$rates[self::$from_currency_code.".".self::$to_currency_code] = 1;
-			return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
-		}
-		else {
-			if(self::$debug) {echo "-- could not find from and to values!";}
-		}
-		if(isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code])) {
-			return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	static function get_exchanged_value($amount = 0, $digits = 2) {
-		self::retrieve_defaults();
-		if(self::$debug) {echo "-- from ".self::$from_currency_code;}
-		if(self::$debug) {echo "-- to ".self::$to_currency_code;}
-		if(self::$debug) {echo "-- amount ".$amount;}
-		$rate = self::get_rate();
-		if(self::$debug) {echo "-- rate ".$rate;}
-		return strtoupper(self::$to_currency_code).' '.round(floatval($rate * $amount), $digits);
-	}
-
-	private static function retrieve_defaults() {
-		if(!self::$from_currency_code) {
-			if(self::$from_currency_code = Session::get("CurrencyConverter.from_currency_code")) {
-			}
-			else {
-				self::$from_currency_code = self::$defaults["DefaultFromCurrency"];
-			}
-			if(!self::$from_currency_code && self::$to_currency_code) {
-				self::$from_currency_code = self::$to_currency_code;
-			}
-		}
-		if(!self::$to_currency_code) {
-			if(self::$to_currency_code = Session::get("CurrencyConverter.to_currency_code")) {
-			}
-			else {
-				self::$to_currency_code = self::$defaults["DefaultToCurrency"];
-			}
-			if(self::$from_currency_code && !self::$to_currency_code) {
-				self::$to_currency_code = self::$from_currency_code;
-			}
-		}
-	}
+    public static function has_from_and_to_currencies()
+    {
+        self::retrieve_defaults();
+        if (self::$to_currency_code && self::$from_currency_code) {
+            return true;
+        }
+    }
 
 
-	private static function currency_exists($v) {
-		$outcome = array_key_exists($v, self::$currency_list);
-		if(!$outcome && self::$debug) {
-			die( "$v currency could not be found!");
-		}
-		return $outcome;
-	}
+    public static function get_rate()
+    {
+        //$url = http://finance.yahoo.com/currency/convert?amt=1&from=NZD&to=USD&submit=Convert
+        if (self::has_from_and_to_currencies() && !self::from_equals_to()) {
+            if (isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code]) && self::$rates[self::$from_currency_code.".".self::$to_currency_code] > 0) {
+                return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
+            } else {
+                $url = 'http://download.finance.yahoo.com/d/quotes.csv?s='.self::$from_currency_code.self::$to_currency_code.'=X&f=sl1d1t1ba&e=.csv';
+                if (($ch = @curl_init())) {
+                    $timeout = 5; // set to zero for no timeout
+                curl_setopt($ch, CURLOPT_URL, "$url");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                    $record = curl_exec($ch);
+                    if (self::$debug) {
+                        echo "-- CURL:";
+                        print_r($record);
+                    }
+                    curl_close($ch);
+                }
+                if (!$record) {
+                    $record = file_get_contents($url);
+                    //if(self::$debug) {echo "-- FILE_GET_CONTENTS:"; print_r($record);}
+                }
+                if ($record) {
+                    $currency_data = explode(',', $record);
+                    self::$rates[self::$from_currency_code.".".self::$to_currency_code] = $currency_data[1];
+                    if (!isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code]) || !self::$rates[self::$from_currency_code.".".self::$to_currency_code]) {
+                        self::$rates[self::$from_currency_code.".".self::$to_currency_code] = $currency_data[2];
+                    }
+                } else {
+                    if (self::$debug) {
+                        echo "-- could not retrieve data";
+                    }
+                }
+            }
+        } elseif (self::from_equals_to()) {
+            self::$rates[self::$from_currency_code.".".self::$to_currency_code] = 1;
+            return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
+        } else {
+            if (self::$debug) {
+                echo "-- could not find from and to values!";
+            }
+        }
+        if (isset(self::$rates[self::$from_currency_code.".".self::$to_currency_code])) {
+            return self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0;
+        } else {
+            return 0;
+        }
+    }
 
-	//CMS ...
+    public static function get_exchanged_value($amount = 0, $digits = 2)
+    {
+        self::retrieve_defaults();
+        if (self::$debug) {
+            echo "-- from ".self::$from_currency_code;
+        }
+        if (self::$debug) {
+            echo "-- to ".self::$to_currency_code;
+        }
+        if (self::$debug) {
+            echo "-- amount ".$amount;
+        }
+        $rate = self::get_rate();
+        if (self::$debug) {
+            echo "-- rate ".$rate;
+        }
+        return strtoupper(self::$to_currency_code).' '.round(floatval($rate * $amount), $digits);
+    }
 
-	public function getCMSFields() {
-		return new FieldList(
-			new TextField("defaultFromCurrencyCode", _t('CurrencyConverterWidget.defaultFromCurrencyCode', "Default From Currency Code")),
-			new TextField("Defaultto_currency_code", _t('CurrencyConverterWidget.Defaultto_currency_code', "Default To Currency Code")),
-			new CurrencyField("DefaultAmount", _t('CurrencyConverterWidget.DefaultAmount', "Default Amount to be Converted"))
-		);
-	}
-
-	//set for every transaction....
-
-	public function setAmount($amount = 0) {
-		$this->amount = floatval($amount);
-		Session::set("CurrencyConverter.Amount", $amount);
-	}
-
-	// get for every transaction ...
-
-	public function getExchangedAmount($amount = 0) {
-		$this->getValues();
-		if($amount) {
-			$this->amount = $amount;
-		}
-		$this->amount = floatval($this->amount);
-		return self::get_exchanged_value($this->amount);
-	}
-
-	// for templates ...
-
-	public function CurrencyConverter() {
-		$this->getValues();
-		$convertedAmount = $this->getExchangedAmount();
-		$output = new ArrayList();
-		$output->push(
-			new ArrayData(
-			array(
-				"from_currency_code" =>  self::$from_currency_code,
-				"to_currency_code" => self::$to_currency_code,
-				"amount" => $this->amount,
-				"rate" => floatval(self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0),
-				"convertedAmount" => $convertedAmount
-			)
-			)
-		);
-		return $output;
-	}
-
-	public function Currencies() {
-		$this->getValues();
-		$currencies = new ArrayList;
-		foreach(self::$currency_list as $key => $value) {
-			$from = ($key == self::$from_currency_code);
-			$to = ($key == self::$to_currency_code);
-			$item = new ArrayData(
-			Array(
-				"code" => $key,
-				"name" => $value,
-				"currentFrom" => $from,
-				"currentTo" => $to
-			)
-			);
-			$currencies->push($item);
-		}
-		return $currencies;
-	}
+    private static function retrieve_defaults()
+    {
+        if (!self::$from_currency_code) {
+            if (self::$from_currency_code = Session::get("CurrencyConverter.from_currency_code")) {
+            } else {
+                self::$from_currency_code = self::$defaults["DefaultFromCurrency"];
+            }
+            if (!self::$from_currency_code && self::$to_currency_code) {
+                self::$from_currency_code = self::$to_currency_code;
+            }
+        }
+        if (!self::$to_currency_code) {
+            if (self::$to_currency_code = Session::get("CurrencyConverter.to_currency_code")) {
+            } else {
+                self::$to_currency_code = self::$defaults["DefaultToCurrency"];
+            }
+            if (self::$from_currency_code && !self::$to_currency_code) {
+                self::$to_currency_code = self::$from_currency_code;
+            }
+        }
+    }
 
 
-	private function retrieveGetValues() {
-		if(isset($_GET["f"])  ) {
-			self::set_from_currency_code(strtolower(substr($_GET["f"], 0, 3)));
-		}
-		if( isset($_GET["t"])  ) {
-			self::set_to_currency_code(strtolower(substr($_GET["t"], 0, 3)));
-		}
-		if(isset($_GET["a"]) ) {
-			$this->amount = floatval($_GET["a"]);
-			$this->setAmount($this->amount);
-		}
-	}
+    private static function currency_exists($v)
+    {
+        $outcome = array_key_exists($v, self::$currency_list);
+        if (!$outcome && self::$debug) {
+            die("$v currency could not be found!");
+        }
+        return $outcome;
+    }
+
+    //CMS ...
+
+    public function getCMSFields()
+    {
+        return new FieldList(
+            new TextField("defaultFromCurrencyCode", _t('CurrencyConverterWidget.defaultFromCurrencyCode', "Default From Currency Code")),
+            new TextField("Defaultto_currency_code", _t('CurrencyConverterWidget.Defaultto_currency_code', "Default To Currency Code")),
+            new CurrencyField("DefaultAmount", _t('CurrencyConverterWidget.DefaultAmount', "Default Amount to be Converted"))
+        );
+    }
+
+    //set for every transaction....
+
+    public function setAmount($amount = 0)
+    {
+        $this->amount = floatval($amount);
+        Session::set("CurrencyConverter.Amount", $amount);
+    }
+
+    // get for every transaction ...
+
+    public function getExchangedAmount($amount = 0)
+    {
+        $this->getValues();
+        if ($amount) {
+            $this->amount = $amount;
+        }
+        $this->amount = floatval($this->amount);
+        return self::get_exchanged_value($this->amount);
+    }
+
+    // for templates ...
+
+    public function CurrencyConverter()
+    {
+        $this->getValues();
+        $convertedAmount = $this->getExchangedAmount();
+        $output = new ArrayList();
+        $output->push(
+            new ArrayData(
+            array(
+                "from_currency_code" =>  self::$from_currency_code,
+                "to_currency_code" => self::$to_currency_code,
+                "amount" => $this->amount,
+                "rate" => floatval(self::$rates[self::$from_currency_code.".".self::$to_currency_code]+0),
+                "convertedAmount" => $convertedAmount
+            )
+            )
+        );
+        return $output;
+    }
+
+    public function Currencies()
+    {
+        $this->getValues();
+        $currencies = new ArrayList;
+        foreach (self::$currency_list as $key => $value) {
+            $from = ($key == self::$from_currency_code);
+            $to = ($key == self::$to_currency_code);
+            $item = new ArrayData(
+            array(
+                "code" => $key,
+                "name" => $value,
+                "currentFrom" => $from,
+                "currentTo" => $to
+            )
+            );
+            $currencies->push($item);
+        }
+        return $currencies;
+    }
 
 
-
+    private function retrieveGetValues()
+    {
+        if (isset($_GET["f"])) {
+            self::set_from_currency_code(strtolower(substr($_GET["f"], 0, 3)));
+        }
+        if (isset($_GET["t"])) {
+            self::set_to_currency_code(strtolower(substr($_GET["t"], 0, 3)));
+        }
+        if (isset($_GET["a"])) {
+            $this->amount = floatval($_GET["a"]);
+            $this->setAmount($this->amount);
+        }
+    }
 }
 
 
-class CurrencyConverterWidget_Controller extends ContentController {
-	function __construct($dataRecord = Null) {
-		parent::__construct($dataRecord);
-	}
+class CurrencyConverterWidget_Controller extends ContentController
+{
+    public function __construct($dataRecord = null)
+    {
+        parent::__construct($dataRecord);
+    }
 
-	function getRate() {
-		$CurrencyConverterWidgetObject = new CurrencyConverterWidget();
-		//$CurrencyConverterWidgetObject->debug = true;
-		echo $CurrencyConverterWidgetObject->getExchangedAmount();
-	}
+    public function getRate()
+    {
+        $CurrencyConverterWidgetObject = new CurrencyConverterWidget();
+        //$CurrencyConverterWidgetObject->debug = true;
+        echo $CurrencyConverterWidgetObject->getExchangedAmount();
+    }
 }

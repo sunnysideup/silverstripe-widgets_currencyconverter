@@ -3,8 +3,10 @@
     "type": "silverstripe-module",
     "description": "",
     "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
         "widgets_currencyconverter",
-        "silverstripe",
         "currency conversion"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
