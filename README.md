@@ -15,7 +15,7 @@
 
  * [Developer Docs](docs/en/INDEX.md)
  * [User Guide](docs/en/userguide.md)
- * [API Docs](http://docs.ssmods.com/sunnysideup/widgets_currencyconverter)
+ * [API Docs](http://docs.ssmods.com/sunnysideup/widgets_currencyconverter/classes.xhtml)
 
 ## Requirements
 
